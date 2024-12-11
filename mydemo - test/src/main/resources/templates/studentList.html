@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Student Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function populateForm(student) {
+        alert("trigger alert");
+            $('#id').val(student.id);
+            $('#name').val(student.name);
+            $('#address').val(student.address);
+            $('#gender').val(student.gender);
+            $('#dob').val(student.dob);
+            $('#email').val(student.email);
+            $('#phone').val(student.phone);
+        }
+    </script>
+
+
+</head>
+<body>
+<div class="container mt-4">
+    <h1>Student Management</h1>
+
+    <!-- Student List -->
+    <h3>Student List</h3>
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>#</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Gender</th>
+            <th>Date of Birth</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="student, iterStat : ${students}">
+            <td th:text="${iterStat.index + 1}"></td>
+            <td th:text="${student.id}"></td>
+            <td th:text="${student.name}"></td>
+            <td th:text="${student.address}"></td>
+            <td th:text="${student.gender}"></td>
+            <td th:text="${#dates.format(student.dob, 'dd/MM/yyyy')}"></td>
+            <td th:text="${student.email}"></td>
+            <td th:text="${student.phone}"></td>
+            <td>
+                <form th:action="@{/deleteStudent}" method="post" style="display: inline;">
+                    <input type="hidden" name="id" th:value="${student.id}" />
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+                <a th:href="@{/editStudent(id=${student.id})}" class="btn btn-info btn-sm">Edit</a>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <h3>Create Student</h3>
+    <form th:action="@{/saveStudent}" method="post" class="mt-3">
+        <input type="hidden" id="id" name="id"> <!-- For updating -->
+        <div class="row">
+            <div class="col-md-4">
+                <label for="name" class="form-label">Name:</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="col-md-4">
+                <label for="address" class="form-label">Address:</label>
+                <input type="text" class="form-control" id="address" name="address" required>
+            </div>
+            <div class="col-md-4">
+                <label for="gender" class="form-label">Gender:</label>
+                <input type="text" class="form-control" id="gender" name="gender" required>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <label for="dob" class="form-label">Date of Birth:</label>
+                <input type="date" class="form-control" id="dob" name="dob" required>
+            </div>
+            <div class="col-md-4">
+                <label for="email" class="form-label">Email:</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="col-md-4">
+                <label for="phone" class="form-label">Phone:</label>
+                <input type="text" class="form-control" id="phone" name="phone" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success mt-3">Save</button>
+    </form>
+</div>
+</body>
+</html>
